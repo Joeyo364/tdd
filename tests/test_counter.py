@@ -51,8 +51,10 @@ class CounterTest(TestCase):
         """It should delete a counter"""
         result = self.client.post('/counters/delete')
         self.assertEqual(result.status_code, status.HTTP_201_CREATED)
-        result = self.client.delete('/counters/delete')
-        self.assertEqual(result.status_code, status.HTTP_204_NO_CONTENT)
+        result = delete_counter('delete')
+        self.assertEqual(result, status.HTTP_204_NO_CONTENT)
+        result = delete_counter('delete')
+        self.assertEqual(result, status.HTTP_404_NOT_FOUND)        
 
 
 COUNTERS = {}
@@ -77,3 +79,12 @@ def update_counter(name):
     """It should update the counter"""
     COUNTERS[name] += 1
     return status.HTTP_200_OK
+
+
+def delete_counter(name):
+    if name not in COUNTERS:
+        return status.HTTP_404_NOT_FOUND
+    else:
+        del COUNTERS[name]
+        return status.HTTP_204_NO_CONTENT
+    
