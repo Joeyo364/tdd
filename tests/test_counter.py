@@ -47,6 +47,13 @@ class CounterTest(TestCase):
         self.assertEqual(result, status.HTTP_200_OK)  # ensure successful return code
         self.assertEqual(COUNTERS[counterName], value+1)  # check that counter was incremented
 
+    def test_delete_a_counter(self):
+        """It should delete a counter"""
+        result = self.client.post('/counters/delete')
+        self.assertEqual(result.status_code, status.HTTP_201_CREATED)
+        result = self.client.delete('/counters/delete')
+        self.assertEqual(result.status_code, status.HTTP_204_NO_CONTENT)
+
 
 COUNTERS = {}
 
